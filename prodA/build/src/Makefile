@@ -1,10 +1,15 @@
+.PHONY: all
 all : ap01
 
-ap01.o : ap01.c
-	gcc -Wall -c -MMD -I ../inc ap01.c
+CFLAGS += -Wall
+CFLAGS += -g
+CFLAGS += -MMD
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c -I ../inc $<
 
 ap01 : ap01.o
-	gcc -Wall ap01.o -L ../lib -lCom -o ap01
+	$(CC) $(CFLAGS) $^ -L ../lib -lCom -o $@
 
 .PHONY: clean
 clean:
