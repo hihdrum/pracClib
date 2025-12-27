@@ -1,8 +1,15 @@
-libCom.a : func01.o
-	ar rcs libCom.a func01.o
+.PHONY: all
+all : libCom.a
 
-func01.o : func01.c
-	gcc -Wall -c -MMD func01.c
+CFLAGS += -Wall
+CFLAGS += -g
+CFLAGS += -MMD
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $<
+
+libCom.a: func01.o
+	ar rcs $@ $^
 
 -include *.d
 
