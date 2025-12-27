@@ -1,5 +1,5 @@
 .PHONY: all
-all : libCom.a
+all : libCom.a libCom.so
 
 CFLAGS += -Wall
 CFLAGS += -g
@@ -11,9 +11,11 @@ CFLAGS += -MMD
 libCom.a: func01.o
 	ar rcs $@ $^
 
+libCom.so: func01.c
+	$(CC) -shared -o $@ $^
+
 -include *.d
 
 .PHONY: clean
 clean:
-	rm -f *.o *.d *.a
-
+	rm -f *.o *.d *.a *.so
