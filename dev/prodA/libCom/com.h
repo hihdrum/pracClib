@@ -1,0 +1,6 @@
+#ifndef COM_H
+#define COM_H
+
+void func01(int x);
+
+#endif
