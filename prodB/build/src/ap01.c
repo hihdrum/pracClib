@@ -4,7 +4,7 @@
 int main(void)
 {
   printf("prodB.AP01\n");
-  func01(100);
+  func01(100, 200);
 
   return 0;
 }

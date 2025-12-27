@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "com.h"
 
-void func01(int x)
+void func01(int x, int y)
 {
-  printf("prodB.libCom.func01 : x = %d\n", x);
+  printf("prodB.libCom.func01 : x = %d, y = %d\n", x, y);
 }
