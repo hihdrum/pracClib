@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "com.h"
+#include "middle.h"
 
 int main(void)
 {
