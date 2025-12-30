@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "lowProd02.h"
 
-void lfunc01(int x, int y)
+void lowProd02_func01(int x, int y)
 {
-  printf("LowProd02.lfunc01 : x = %d, y = %d\n", x, y);
+  printf("%s : x = %d, y = %d\n", __func__, x, y);
 }
