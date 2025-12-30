@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "lowProd01.h"
 
-void lfunc01(int x)
+void lowProd01_lfunc01(int x)
 {
-  printf("LowProd01.lfunc01 shr : x = %d\n", x);
+  printf("%s shr : x = %d\n", __func__, x);
 }
