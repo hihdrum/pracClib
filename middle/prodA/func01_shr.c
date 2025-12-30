@@ -1,7 +1,10 @@
 #include <stdio.h>
-#include "com.h"
+#include "lowProd01.h"
+#include "middle.h"
 
 void func01(int x)
 {
-  printf("prodA.libCom.func01 shr: x = %d\n", x);
+  printf("prodA.middle.func01 shr: x = %d\n", x);
+  printf("call lfunc01\n");
+  lfunc01(x);
 }
