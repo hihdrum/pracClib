@@ -15,10 +15,10 @@ CFLAGS += -MMD
 %_shr.o: %_shr.c
 	$(CC) $(CFLAGS) -fPIC -c $<
 
-libLowProd02.a: lfunc01.o
+libLowProd02.a: func01.o
 	ar rcs $@ $^
 
-libLowProd02.so: lfunc01_shr.o
+libLowProd02.so: func01_shr.o
 	$(CC) -shared -o $@ $^
 
 -include *.d
