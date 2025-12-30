@@ -5,6 +5,6 @@
 void func01(int x)
 {
   printf("prodA.middle.func01 shr: x = %d\n", x);
-  printf("call lfunc01\n");
-  lfunc01(x);
+  printf("call lowProd01_func01\n");
+  lowProd01_func01(x);
 }
