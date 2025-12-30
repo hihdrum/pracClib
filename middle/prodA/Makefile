@@ -1,4 +1,4 @@
-TARGETS := middle.a middle.so
+TARGETS := libMiddle.a libMiddle.so
 .PHONY: all
 all : $(TARGETS)
 
@@ -15,10 +15,10 @@ CFLAGS += -I ../../lowProd01
 %_shr.o: %_shr.c
 	$(CC) $(CFLAGS) -fPIC -c $<
 
-middle.a: func01.o
+libMiddle.a: func01.o
 	ar rcs $@ $^
 
-middle.so: func01_shr.o
+libMiddle.so: func01_shr.o
 	$(CC) -shared -o $@ $^
 
 -include *.d
