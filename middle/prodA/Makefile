@@ -1,9 +1,11 @@
+TARGETS := libMiddle.a libMiddle.so
 .PHONY: all
-all : libCom.a libCom.so
+all : $(TARGETS)
 
 CFLAGS += -Wall
 CFLAGS += -g
 CFLAGS += -MMD
+CFLAGS += -I ../../lowProd01
 
 # 静的ライブラリ向け
 %.o: %.c
@@ -13,14 +15,14 @@ CFLAGS += -MMD
 %_shr.o: %_shr.c
 	$(CC) $(CFLAGS) -fPIC -c $<
 
-libCom.a: func01.o
+libMiddle.a: func01.o func02com.o
 	ar rcs $@ $^
 
-libCom.so: func01_shr.o
+libMiddle.so: func01_shr.o func02com_shr.o
 	$(CC) -shared -o $@ $^
 
 -include *.d
 
 .PHONY: clean
 clean:
-	rm -f *.o *.d *.a *.so
+	rm -f *.o *.d $(TARGETS)
