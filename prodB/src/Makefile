@@ -1,4 +1,4 @@
-TARGETS := ap01 ap01_shr ap01_wrap ap01_shr_wrap ap01_shr_wrap_v2
+TARGETS := ap01 ap01_shr ap01_sd ap01_ds ap01_wrap ap01_shr_wrap ap01_shr_wrap_v2
 
 .PHONY: all
 all : $(TARGETS)
