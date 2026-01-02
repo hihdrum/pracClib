@@ -4,5 +4,5 @@
 
 void func02com(int x)
 {
-  printf("prodB.middle.func02com : x = %d", x);
+  printf("製品B 中間ライブラリ : %s : x = %d", __func__, x);
 }
