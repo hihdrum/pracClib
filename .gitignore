@@ -1,9 +1,11 @@
 *.swp
+*~
 *.o
 *.d
 *.a
 *.so
 
+memo.org
 prodA/build/inc
 prodA/build/src/ap01
 prodA/build/src/ap01_shr
