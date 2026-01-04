@@ -3,5 +3,5 @@
 
 void lowProd01_func01(int x)
 {
-  printf("%s shr : x = %d\n", __func__, x);
+  printf("製品A 下位ライブラリ(共有) : %s : x = %d\n", __func__, x);
 }

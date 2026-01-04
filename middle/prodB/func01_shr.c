@@ -4,7 +4,7 @@
 
 void func01(int x, int y)
 {
-  printf("prodB.middle.func01 shr: x = %d, y = %d\n", x, y);
-  printf("call lowProd02_func01\n");
+  printf("製品B 中間ライブラリ(共有) : %s: x = %d, y = %d\n", __func__, x, y);
+  printf("CALL lowProd02_func01\n");
   lowProd02_func01(x, y);
 }

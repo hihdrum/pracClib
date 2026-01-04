@@ -4,7 +4,7 @@
 
 void func01(int x)
 {
-  printf("prodA.middle.func01 shr: x = %d\n", x);
-  printf("call lowProd01_func01\n");
+  printf("製品A 中間ライブラリ(共有) : %s : x = %d\n", __func__, x);
+  printf("CALL 製品A lowProd01_func01\n");
   lowProd01_func01(x);
 }

@@ -31,6 +31,19 @@ ap01_sd : ap01.o
 ap01_ds : ap01.o
 	$(CC) $(CFLAGS) $^ ../lib/libMiddle.a -L ../lib -lLowProd02 -o $@
 
+# ここから編集中
+
+ap01_try : ap01.o
+	$(CC) $(CFLAGS) $^ -L ../lib -lMiddle -lLowProd02 -L ../../prodA/lib -lMiddle -lLowProd01 -o $@
+
+
+
+
+
+
+
+
+
 ap01_wrap : ap01.o
 	$(CC) $(CFLAGS) $^ -Wl,--wrap=func01 ../lib/wrap_func01.o ../../../prodA/build/lib/libCom.a -o $@
 
