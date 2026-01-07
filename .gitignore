@@ -6,6 +6,7 @@
 *.so
 
 memo.org
+prodA/dev/ext
 prodA/build/inc
 prodA/build/src/ap01
 prodA/build/src/ap01_shr
