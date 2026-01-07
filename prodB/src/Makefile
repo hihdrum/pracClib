@@ -1,4 +1,4 @@
-TARGETS := ap01 ap01_shr ap01_sd ap01_ds ap01_wrap ap01_shr_wrap ap01_shr_wrap_v2
+TARGETS := ap01 ap01_shr ap01_sd ap01_ds
 
 .PHONY: all
 all : $(TARGETS)
@@ -34,7 +34,14 @@ ap01_ds : ap01.o
 # ここから編集中
 
 ap01_try : ap01.o
-	$(CC) $(CFLAGS) $^ -L ../lib -lMiddle -lLowProd02 -L ../../prodA/lib -lMiddle -lLowProd01 -o $@
+	$(CC) $(CFLAGS) $^ \
+	-L ../../middle/prodBBridge -lProdBBridge \
+	-L ../../middle/prodB -lMiddle \
+	-L ../../lowProd02 -lLowProd02 \
+	-o $@
+
+run_ap01_try : ap01_try
+	LD_LIBRARY_PATH=../../lowProd01:../../middle/prodBBridge:../../middle/prodA:../../middle/prodB:../../lowProd02 ./ap01_try
 
 
 
@@ -43,9 +50,8 @@ ap01_try : ap01.o
 
 
 
-
-ap01_wrap : ap01.o
-	$(CC) $(CFLAGS) $^ -Wl,--wrap=func01 ../lib/wrap_func01.o ../../../prodA/build/lib/libCom.a -o $@
+#ap01_wrap : ap01.o
+#	$(CC) $(CFLAGS) $^ -Wl,--wrap=func01 ../lib/wrap_func01.o ../../../prodA/build/lib/libCom.a -o $@
 
 # libCom : 動的リンク版, ld --wrapによるシンボル置き換え。
 ap01_shr_wrap : ap01.o

@@ -13,5 +13,9 @@ int main(void)
   func02com(200);
   puts("");
 
+  puts("----------------------");
+  func01(300, 3000);
+  puts("");
+
   return 0;
 }
