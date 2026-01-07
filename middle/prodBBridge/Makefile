@@ -10,7 +10,7 @@ CFLAGS += -fPIC
 	$(CC) $(CFLAGS) -c $<
 
 libProdBBridge.so : func01_bridge.o
-	$(CC) -shared -o $@ $^
+	$(CC) -shared -o $@ $^ -L ../../prodA/lib -Wl,--no-as-needed -lLowProd01
 
 -include *.d
 
