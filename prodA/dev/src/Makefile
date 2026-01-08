@@ -10,7 +10,7 @@ CFLAGS += -Wall
 CFLAGS += -g
 CFLAGS += -MMD
 
-%.o: %.c
+%.o: %.c $(LIB_INC)
 	$(CC) $(CFLAGS) -c -I $(LIB_INC) $<
 
 #------------------------------------------------------------------
@@ -24,13 +24,20 @@ run-all : run_ap01 ap01_shr run_ap01_sd run_ap01_ds
 #------------------------------------------------------------------
 LOWPROD01_DIR := ../../../lowProd01
 
+LIBS := $(LIB_PATH)/libLowProd01.a $(LIB_PATH)/libLowProd01.so
+HEADER := $(LIB_INC)/lowProd01.h
+
 .PHONY : preLib
-preLib :
-	# lowProd01
+preLib : $(LIBS) $(HEADER)
+
+$(LIBS) : $(LIB_PATH)/% : $(LOWPROD01_DIR)/%
+	cp $< $@
+
+$(HEADER) : $(LOWPROD01_DIR)/lowProd01.h
+	cp $< $@
+
+$(LOWPROD01_DIR)/lowProd01.h $(LOWPROD01_DIR)/libLowProd01.a $(LOWPROD01_DIR)/libLowProd01.so :
 	make -C $(LOWPROD01_DIR)
-	cp $(LOWPROD01_DIR)/lowProd01.h $(LIB_INC)
-	cp $(LOWPROD01_DIR)/libLowProd01.a $(LIB_PATH)
-	cp $(LOWPROD01_DIR)/libLowProd01.so $(LIB_PATH)
 
 #------------------------------------------------------------------
 # 静的リンク版
