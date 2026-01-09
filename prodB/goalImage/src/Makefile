@@ -1,74 +1,100 @@
 TARGETS := ap01 ap01_shr ap01_sd ap01_ds
 
-LIB_INC := ../ext/inc
-LIB_PATH := ../ext/lib
-
-.PHONY: all
-all : $(TARGETS)
-
-CFLAGS += -Wall
-CFLAGS += -g
-CFLAGS += -MMD
-
-%.o: %.c
-	$(CC) $(CFLAGS) -c -I $(LIB_INC) $<
-
 #------------------------------------------------------------------
 # 環境整備
 #------------------------------------------------------------------
-# 下層
-LOW_DIR := ../../../lowProd02
-LOW_LIBS := $(LIB_PATH)/libLowProd02.a $(LIB_PATH)/libLowProd02.so
-LOW_HEADER := $(LIB_INC)/lowProd02.h
+# 製品A
+#------------------------------------
+LIB_INC_A := ../ext/incA
+LIB_PATH_A := ../ext/libA
 
-# 中間層
-MID_DIR := ../../../middle/prodB
-MID_LIBS := $(LIB_PATH)/libMiddle.a $(LIB_PATH)/libMiddle.so
-MID_HEADER := $(LIB_INC)/middle.h
+LOW_DIR_A := ../../../lowProd01
+LOW_LIBS_A := $(LIB_PATH_A)/libLowProd01.so
+LOW_HEADER_A := $(LIB_INC_A)/lowProd01.h
+
+MID_DIR_A := ../../../middle/prodA
+MID_LIBS_A := $(LIB_PATH_A)/libMiddle.so
+MID_HEADER_A := $(LIB_INC_A)/middle.h
+
+.PHONY : preLibA
+preLibA : $(LOW_LIBS_A) $(LOW_HEADER_A) $(MID_LIBS_A) $(MID_HEADER_A)
+
+$(LOW_LIBS_A) : $(LIB_PATH_A)/% : $(LOW_DIR_A)/%
+	cp $< $@
+
+$(LOW_HEADER_A) : $(LOW_DIR_A)/lowProd01.h
+	cp $< $@
+
+$(LOW_DIR_A)/lowProd01.h $(LOW_DIR_A)/libLowProd01.so :
+	make -C $(LOW_DIR_A)
+
+$(MID_LIBS_A) : $(LIB_PATH_A)/% : $(MID_DIR_A)/%
+	cp $< $@
+
+$(MID_HEADER_A) : $(MID_DIR_A)/middle.h
+	cp $< $@
+
+$(MID_DIR_A)/libMiddle.so :
+	make -C $(MID_DIR_A)
+
+#------------------------------------
+# 製品B
+#------------------------------------
+LIB_INC_B := ../ext/incB
+LIB_PATH_B := ../ext/libB
+
+LOW_DIR_B := ../../../lowProd02
+LOW_LIBS_B := $(LIB_PATH_B)/libLowProd02.so
+LOW_HEADER_B := $(LIB_INC_B)/lowProd02.h
+
+MID_DIR_B := ../../../middle/prodB
+MID_LIBS_B := $(LIB_PATH_B)/libMiddle.so
+MID_HEADER_B := $(LIB_INC_B)/middle.h
+
+.PHONY : preLibB
+preLibB : $(LOW_LIBS_B) $(LOW_HEADER_B) $(MID_LIBS_B) $(MID_HEADER_B)
+
+$(LOW_LIBS_B) : $(LIB_PATH_B)/% : $(LOW_DIR_B)/%
+	cp $< $@
+
+$(LOW_HEADER_B) : $(LOW_DIR_B)/lowProd02.h
+	cp $< $@
+
+$(LOW_DIR_B)/lowProd01.h $(LOW_DIR_B)/libLowProd01.so :
+	make -C $(LOW_DIR_B)
+
+$(MID_LIBS_B) : $(LIB_PATH_B)/% : $(MID_DIR_B)/%
+	cp $< $@
+
+$(MID_HEADER_B) : $(MID_DIR_B)/middle.h
+	cp $< $@
+
+$(MID_DIR_B)/libMiddle.a $(MID_DIR_B)/libMiddle.so :
+	make -C $(MID_DIR_B)
 
 .PHONY : preLib
-preLib : $(LOW_LIBS) $(LOW_HEADER) $(MID_LIBS) $(MID_HEADER)
-
-$(LOW_LIBS) : $(LIB_PATH)/% : $(LOW_DIR)/%
-	cp $< $@
-
-$(LOW_HEADER) : $(LOW_DIR)/lowProd02.h
-	cp $< $@
-
-$(LOW_DIR)/lowProd01.h $(LOW_DIR)/libLowProd01.a $(LOW_DIR)/libLowProd01.so :
-	make -C $(LOW_DIR)
-
-#---
-
-$(MID_LIBS) : $(LIB_PATH)/% : $(MID_DIR)/%
-	cp $< $@
-
-$(MID_HEADER) : $(MID_DIR)/middle.h
-	cp $< $@
-
-$(MID_DIR)/libMiddle.a $(MID_DIR)/libMiddle.so :
-	make -C $(LOW_DIR)
+preLib : preLibA preLibB
 
 #------------------------------------------------------------------
 # 静的リンク
 ap01 : ap01.o
-	$(CC) $(CFLAGS) $^ $(LIB_PATH)/libMiddle.a $(LIB_PATH)/libLowProd02.a -o $@
+	$(CC) $(CFLAGS) $^ $(LIB_PATH_B)/libMiddle.a $(LIB_PATH_B)/libLowProd02.a -o $@
 
 # 動的リンク版
 ap01_shr : ap01.o
-	$(CC) $(CFLAGS) $^ -L $(LIB_PATH) -lMiddle -lLowProd02 -o $@
+	$(CC) $(CFLAGS) $^ -L $(LIB_PATH_B) -lMiddle -lLowProd02 -o $@
 
 # 混在リンク版
 #  libLowProd01 : static
 #  libMiddle    : dynamic
 ap01_sd : ap01.o
-	$(CC) $(CFLAGS) $^ -L $(LIB_PATH) -lMiddle $(LIB_PATH)/libLowProd02.a -o $@
+	$(CC) $(CFLAGS) $^ -L $(LIB_PATH_B) -lMiddle $(LIB_PATH_B)/libLowProd02.a -o $@
 
 # 混在リンク版
 #  libLowProd01 : dynamic
 #  libMiddle    : static
 ap01_ds : ap01.o
-	$(CC) $(CFLAGS) $^ $(LIB_PATH)/libMiddle.a -L $(LIB_PATH) -lLowProd02 -o $@
+	$(CC) $(CFLAGS) $^ $(LIB_PATH_B)/libMiddle.a -L $(LIB_PATH_B) -lLowProd02 -o $@
 
 # ここから編集中
 
@@ -119,8 +145,22 @@ run_ap01_shr_wrap : ap01_shr_wrap
 run_ap01_shr_wrap_v2 : ap01_shr_wrap
 	@LD_LIBRARY_PATH=../../../prodA/build/lib:../lib ./ap01_shr_wrap
 
+.PHONY: all
+all : $(TARGETS)
+
+CFLAGS += -Wall
+CFLAGS += -g
+CFLAGS += -MMD
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c -I $(LIB_INC_B) $<
+
+
+
 .PHONY: clean
 clean:
 	rm -f *.o *.d $(TARGETS)
-	rm -f ../ext/inc/*
-	rm -f ../ext/lib/*
+	rm -f ../ext/incA/*
+	rm -f ../ext/libA/*
+	rm -f ../ext/incB/*
+	rm -f ../ext/libB/*
