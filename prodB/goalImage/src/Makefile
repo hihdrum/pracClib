@@ -1,5 +1,8 @@
 TARGETS := ap01 ap01_shr ap01_sd ap01_ds
 
+.PHONY: all
+all : $(TARGETS)
+
 # 製品A,Bの環境整備は似通っているので上手く共通化できるかもしれない。
 #------------------------------------------------------------------
 # 環境整備
@@ -102,8 +105,6 @@ CFLAGS += -MMD
 %.o: %.c
 	$(CC) $(CFLAGS) -c -I $(LIB_INC_B) $<
 
-# ここから編集中
-
 ap01_try : ap01.o
 	$(CC) $(CFLAGS) $^ \
 	-L ../ext/libBBridge -lProdBBridge \
@@ -111,62 +112,23 @@ ap01_try : ap01.o
 	-L ../ext/libA -Wl,--no-as-needed -lLowProd01 \
 	-o $@
 
-run_ap01_try : ap01_try
+run_ap01_A_Br_B : ap01_try
 	LD_LIBRARY_PATH=../ext/libA:../ext/libBBridge:../ext/libB/ ./ap01_try
 
+run_ap01_A_B_Br : ap01_try
+	LD_LIBRARY_PATH=../ext/libA:../ext/libB:../ext/libBBridge ./ap01_try
 
+run_ap01_B_Br_A : ap01_try
+	LD_LIBRARY_PATH=../ext/libB:../ext/libBBridge:../ext/libA/ ./ap01_try
 
-#ap01_try : ap01.o
-#	$(CC) $(CFLAGS) $^ \
-#	-L ../../middle/prodBBridge -lProdBBridge \
-#	-L ../../middle/prodB -lMiddle \
-#	-L ../../lowProd02 -lLowProd02 \
-#	-o $@
+run_ap01_B_A_Br : ap01_try
+	LD_LIBRARY_PATH=../ext/libB:../ext/libA:../ext/libBBridge: ./ap01_try
 
-#run_ap01_try : ap01_try
-#	LD_LIBRARY_PATH=../../lowProd01:../../middle/prodBBridge:../../middle/prodA:../../middle/prodB:../../lowProd02 ./ap01_try
-#
+run_ap01_Br_B_A : ap01_try
+	LD_LIBRARY_PATH=../ext/libBBridge:../ext/libB:../ext/libA/ ./ap01_try
 
-
-
-
-
-
-
-#ap01_wrap : ap01.o
-#	$(CC) $(CFLAGS) $^ -Wl,--wrap=func01 ../lib/wrap_func01.o ../../../prodA/build/lib/libCom.a -o $@
-
-# libCom : 動的リンク版, ld --wrapによるシンボル置き換え。
-ap01_shr_wrap : ap01.o
-	$(CC) $(CFLAGS) $^ -Wl,--wrap=func01 ../lib/wrap_func01.o -L ../../../prodA/build/lib -lCom -o $@
-
-ap01_shr_wrap_v2 : ap01.o
-	$(CC) $(CFLAGS) $^ -Wl,--wrap=func01 -L ../lib -lWrapCom -L ../../../prodA/build/lib -lCom -o $@
-
-#------------------------------------------------------------------
-run_ap01 : ap01
-	@./ap01
-
-run_ap01_shr : ap01_shr
-	@LD_LIBRARY_PATH=../lib ./ap01_shr
-
-run_ap01_sd : ap01_sd
-	@LD_LIBRARY_PATH=../lib ./ap01_sd
-
-run_ap01_ds : ap01_ds
-	@LD_LIBRARY_PATH=../lib ./ap01_ds
-
-run_ap01_shr_wrap : ap01_shr_wrap
-	@LD_LIBRARY_PATH=../../../prodA/build/lib ./ap01_shr_wrap
-
-
-run_ap01_shr_wrap_v2 : ap01_shr_wrap
-	@LD_LIBRARY_PATH=../../../prodA/build/lib:../lib ./ap01_shr_wrap
-
-.PHONY: all
-all : $(TARGETS)
-
-
+run_ap01_Br_A_B : ap01_try
+	LD_LIBRARY_PATH=../ext/libBBridge:../ext/libA:../ext/libB/ ./ap01_try
 
 
 .PHONY: clean
