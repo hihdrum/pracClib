@@ -106,14 +106,26 @@ CFLAGS += -MMD
 
 ap01_try : ap01.o
 	$(CC) $(CFLAGS) $^ \
-	-L ../../middle/prodBBridge -lProdBBridge \
-	-L ../../middle/prodB -lMiddle \
-	-L ../../lowProd02 -lLowProd02 \
+	-L ../ext/libBBridge -lProdBBridge \
+	-L ../ext/libB -lMiddle -lLowProd02 \
+	-L ../ext/libA -Wl,--no-as-needed -lLowProd01 \
 	-o $@
 
 run_ap01_try : ap01_try
-	LD_LIBRARY_PATH=../../lowProd01:../../middle/prodBBridge:../../middle/prodA:../../middle/prodB:../../lowProd02 ./ap01_try
+	LD_LIBRARY_PATH=../ext/libA:../ext/libBBridge:../ext/libB/ ./ap01_try
 
+
+
+#ap01_try : ap01.o
+#	$(CC) $(CFLAGS) $^ \
+#	-L ../../middle/prodBBridge -lProdBBridge \
+#	-L ../../middle/prodB -lMiddle \
+#	-L ../../lowProd02 -lLowProd02 \
+#	-o $@
+
+#run_ap01_try : ap01_try
+#	LD_LIBRARY_PATH=../../lowProd01:../../middle/prodBBridge:../../middle/prodA:../../middle/prodB:../../lowProd02 ./ap01_try
+#
 
 
 
