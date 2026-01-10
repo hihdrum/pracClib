@@ -73,29 +73,34 @@ $(MID_HEADER_B) : $(MID_DIR_B)/middle.h
 $(MID_DIR_B)/libMiddle.a $(MID_DIR_B)/libMiddle.so :
 	make -C $(MID_DIR_B)
 
+#------------------------------------
+# 製品B ブリッジ
+#------------------------------------
+LIB_PATH_B_BRIDGE := ../ext/libBBridge
+
+MID_DIR_B_BRIDGE := ../../../middle/prodBBridge
+MID_LIBS_B_BRIDGE := $(LIB_PATH_B_BRIDGE)/libProdBBridge.so
+
+.PHONY : preLibBBridge
+preLibBBridge : $(MID_LIBS_B_BRIDGE)
+
+$(MID_LIBS_B_BRIDGE) : $(LIB_PATH_B_BRIDGE)/% : $(MID_DIR_B_BRIDGE)/%
+	cp $< $@
+
+$(MID_DIR_B_BRIDGE)/libProdBBridge.so :
+	make -C $(MID_DIR_B_BRIDGE)
+
 .PHONY : preLib
-preLib : preLibA preLibB
+preLib : preLibA preLibB preLibBBridge
 
 #------------------------------------------------------------------
-# 静的リンク
-ap01 : ap01.o
-	$(CC) $(CFLAGS) $^ $(LIB_PATH_B)/libMiddle.a $(LIB_PATH_B)/libLowProd02.a -o $@
 
-# 動的リンク版
-ap01_shr : ap01.o
-	$(CC) $(CFLAGS) $^ -L $(LIB_PATH_B) -lMiddle -lLowProd02 -o $@
+CFLAGS += -Wall
+CFLAGS += -g
+CFLAGS += -MMD
 
-# 混在リンク版
-#  libLowProd01 : static
-#  libMiddle    : dynamic
-ap01_sd : ap01.o
-	$(CC) $(CFLAGS) $^ -L $(LIB_PATH_B) -lMiddle $(LIB_PATH_B)/libLowProd02.a -o $@
-
-# 混在リンク版
-#  libLowProd01 : dynamic
-#  libMiddle    : static
-ap01_ds : ap01.o
-	$(CC) $(CFLAGS) $^ $(LIB_PATH_B)/libMiddle.a -L $(LIB_PATH_B) -lLowProd02 -o $@
+%.o: %.c
+	$(CC) $(CFLAGS) -c -I $(LIB_INC_B) $<
 
 # ここから編集中
 
@@ -149,12 +154,6 @@ run_ap01_shr_wrap_v2 : ap01_shr_wrap
 .PHONY: all
 all : $(TARGETS)
 
-CFLAGS += -Wall
-CFLAGS += -g
-CFLAGS += -MMD
-
-%.o: %.c
-	$(CC) $(CFLAGS) -c -I $(LIB_INC_B) $<
 
 
 
@@ -165,3 +164,4 @@ clean:
 	rm -f ../ext/libA/*
 	rm -f ../ext/incB/*
 	rm -f ../ext/libB/*
+	rm -f ../ext/libBBridge/*
