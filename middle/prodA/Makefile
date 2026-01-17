@@ -3,7 +3,7 @@ TARGETS := libMiddle.a libMiddle.so
 all : $(TARGETS)
 
 CFLAGS += -Wall
-CFLAGS += -g
+CFLAGS += -g3
 CFLAGS += -MMD
 CFLAGS += -I ../../lowProd01
 

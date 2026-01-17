@@ -7,7 +7,7 @@ all : $(TARGETS)
 #------------------------------------------------------------------
 # 環境整備
 #------------------------------------------------------------------
-# 製品A
+# 製品A ラッパー調整
 #------------------------------------
 LIB_INC_A := ../ext/incA
 LIB_PATH_A := ../ext/libA
@@ -17,7 +17,7 @@ LOW_LIBS_A := $(LIB_PATH_A)/libLowProd01.so
 LOW_HEADER_A := $(LIB_INC_A)/lowProd01.h
 
 MID_DIR_A := ../../../middle/prodA
-MID_LIBS_A := $(LIB_PATH_A)/libMiddle.so
+MID_LIBS_A := $(LIB_PATH_A)/libMiddleReal.so
 MID_HEADER_A := $(LIB_INC_A)/middle.h
 
 .PHONY : preLibA
@@ -32,7 +32,7 @@ $(LOW_HEADER_A) : $(LOW_DIR_A)/lowProd01.h
 $(LOW_DIR_A)/lowProd01.h $(LOW_DIR_A)/libLowProd01.so :
 	make -C $(LOW_DIR_A)
 
-$(MID_LIBS_A) : $(LIB_PATH_A)/% : $(MID_DIR_A)/%
+$(LIB_PATH_A)/libMiddleReal.so : $(MID_DIR_A)/libMiddle.so
 	cp $< $@
 
 $(MID_HEADER_A) : $(MID_DIR_A)/middle.h
@@ -79,22 +79,22 @@ $(MID_DIR_B)/libMiddle.a $(MID_DIR_B)/libMiddle.so :
 #------------------------------------
 # 製品B ブリッジ
 #------------------------------------
-LIB_PATH_B_BRIDGE := ../ext/libBBridge
+LIB_PATH_B_SHIM := ../ext/libBShim
 
-MID_DIR_B_BRIDGE := ../../../middle/prodBBridge
-MID_LIBS_B_BRIDGE := $(LIB_PATH_B_BRIDGE)/libProdBBridge.so
+MID_DIR_B_SHIM := ../../../middle/prodBShim
+MID_LIBS_B_SHIM := $(LIB_PATH_B_SHIM)/libMiddle.so
 
-.PHONY : preLibBBridge
-preLibBBridge : $(MID_LIBS_B_BRIDGE)
+.PHONY : preLibBShim
+preLibBShim : $(MID_LIBS_B_SHIM)
 
-$(MID_LIBS_B_BRIDGE) : $(LIB_PATH_B_BRIDGE)/% : $(MID_DIR_B_BRIDGE)/%
+$(MID_LIBS_B_SHIM) : $(LIB_PATH_B_SHIM)/% : $(MID_DIR_B_SHIM)/%
 	cp $< $@
 
-$(MID_DIR_B_BRIDGE)/libProdBBridge.so :
-	make -C $(MID_DIR_B_BRIDGE)
+$(MID_DIR_B_SHIM)/libProdBShim.so :
+	make -C $(MID_DIR_B_SHIM)
 
 .PHONY : preLib
-preLib : preLibA preLibB preLibBBridge
+preLib : preLibA preLibB preLibBShim
 
 #------------------------------------------------------------------
 
@@ -107,9 +107,22 @@ CFLAGS += -MMD
 
 ap01_try : ap01.o
 	$(CC) $(CFLAGS) $^ \
+	-L ../ext/libBShim -lMiddle \
+	-L ../ext/libA -lMiddleReal \
+	-L ../ext/libA -lLowProd01 \
+	-o $@
+
+run_ap01_try : ap01_try
+	LD_LIBRARY_PATH=../ext/libBShim:../ext/libA ./ap01_try
+
+
+
+
+ap01_try2 : ap01.o
+	$(CC) $(CFLAGS) $^ \
 	-L ../ext/libBBridge -lProdBBridge \
 	-L ../ext/libB -lMiddle -lLowProd02 \
-	-L ../ext/libA -Wl,--no-as-needed -lLowProd01 \
+	-L ../ext/libA -Wl,--no-as-needed -lMiddle -lLowProd01 \
 	-o $@
 
 run_ap01_A_Br_B : ap01_try
