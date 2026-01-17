@@ -23,9 +23,8 @@ libMiddle.a: gval.o func01.o func02com.o
 %_shr.o: %_shr.c
 	$(CC) $(CFLAGS) -fPIC -c $<
 
-libMiddle.so: func01_shr.o func02com_shr.o
+libMiddle.so: gval_shr.o func01_shr.o func02com_shr.o
 	$(CC) -shared -o $@ $^
-
 
 -include *.d
 
