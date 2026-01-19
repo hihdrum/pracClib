@@ -1,24 +1,29 @@
 TARGETS := libMiddle.a libMiddle.so
+
 .PHONY: all
 all : $(TARGETS)
 
 CFLAGS += -Wall
-CFLAGS += -g3
+CFLAGS += -g
 CFLAGS += -MMD
 CFLAGS += -I ../../lowProd01
 
+#--------------------------------------------------
 # 静的ライブラリ向け
+#--------------------------------------------------
 %.o: %.c
 	$(CC) $(CFLAGS) -c $<
 
+libMiddle.a: gval.o func01.o func02com.o func03.o
+	ar rcs $@ $^
+
+#--------------------------------------------------
 # 共有ライブラリ向け
+#--------------------------------------------------
 %_shr.o: %_shr.c
 	$(CC) $(CFLAGS) -fPIC -c $<
 
-libMiddle.a: func01.o func02com.o
-	ar rcs $@ $^
-
-libMiddle.so: func01_shr.o func02com_shr.o
+libMiddle.so: gval_shr.o func01_shr.o func02com_shr.o func03_shr.o
 	$(CC) -shared -o $@ $^
 
 -include *.d

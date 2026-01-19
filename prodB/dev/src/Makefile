@@ -16,38 +16,43 @@ CFLAGS += -MMD
 #------------------------------------------------------------------
 # 環境整備
 #------------------------------------------------------------------
-# 下層
-LOW_DIR := ../../../lowProd02
-LOW_LIBS := $(LIB_PATH)/libLowProd02.a $(LIB_PATH)/libLowProd02.so
-LOW_HEADER := $(LIB_INC)/lowProd02.h
+# Low層
+LOWPROD02_DIR := ../../../lowProd02
 
-# 中間層
-MID_DIR := ../../../middle/prodB
-MID_LIBS := $(LIB_PATH)/libMiddle.a $(LIB_PATH)/libMiddle.so
-MID_HEADER := $(LIB_INC)/middle.h
+TO_LOW_LIBS := $(LIB_PATH)/libLowProd02.a $(LIB_PATH)/libLowProd02.so
+TO_LOW_HEADER := $(LIB_INC)/lowProd02.h
+
+.PHONY : preLibLow
+preLibLow : $(TO_LOW_LIBS) $(TO_LOW_HEADER)
+
+$(TO_LOW_LIBS) : $(LIB_PATH)/% : $(LOWPROD02_DIR)/%
+	cp $< $@
+
+$(TO_LOW_HEADER) : $(LOWPROD02_DIR)/lowProd02.h
+	cp $< $@
+
+$(LOWPROD02_DIR)/lowProd01.h $(LOWPROD02_DIR)/libLowProd01.a $(LOWPROD02_DIR)/libLowProd01.so :
+	make -C $(LOWPROD02_DIR)
+
+# Middle層
+MIDDLE_B_DIR := ../../../middle/prodB
+TO_MIDDLE_LIBS := $(LIB_PATH)/libMiddle.a $(LIB_PATH)/libMiddle.so
+TO_MIDDLE_HEADER := $(LIB_INC)/middle.h
+
+.PHONY : preLibMiddle
+preLibMiddle : $(TO_MIDDLE_LIBS) $(TO_MIDDLE_HEADER)
+
+$(TO_MIDDLE_LIBS) : $(LIB_PATH)/% : $(MIDDLE_B_DIR)/%
+	cp $< $@
+
+$(TO_MIDDLE_HEADER) : $(MIDDLE_B_DIR)/middle.h
+	cp $< $@
+
+$(MIDDLE_B_DIR)/libMiddle.a $(MIDDLE_B_DIR)/libMiddle.so :
+	make -C $(MIDDLE_B_DIR)
 
 .PHONY : preLib
-preLib : $(LOW_LIBS) $(LOW_HEADER) $(MID_LIBS) $(MID_HEADER)
-
-$(LOW_LIBS) : $(LIB_PATH)/% : $(LOW_DIR)/%
-	cp $< $@
-
-$(LOW_HEADER) : $(LOW_DIR)/lowProd02.h
-	cp $< $@
-
-$(LOW_DIR)/lowProd01.h $(LOW_DIR)/libLowProd01.a $(LOW_DIR)/libLowProd01.so :
-	make -C $(LOW_DIR)
-
-#---
-
-$(MID_LIBS) : $(LIB_PATH)/% : $(MID_DIR)/%
-	cp $< $@
-
-$(MID_HEADER) : $(MID_DIR)/middle.h
-	cp $< $@
-
-$(MID_DIR)/libMiddle.a $(MID_DIR)/libMiddle.so :
-	make -C $(LOW_DIR)
+preLib : preLibLow preLibMiddle
 
 #------------------------------------------------------------------
 # 静的リンク
