@@ -5,5 +5,6 @@ extern const char *libDescribe;
 
 void func01(int x, int y);
 void func02com(int x);
+void func03(int x, int y);
 
 #endif
