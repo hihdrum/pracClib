@@ -14,7 +14,7 @@ CFLAGS += -I ../../lowProd01
 %.o: %.c
 	$(CC) $(CFLAGS) -c $<
 
-libMiddle.a: gval.o func01.o func02com.o
+libMiddle.a: gval.o func01.o func02com.o func03.o
 	ar rcs $@ $^
 
 #--------------------------------------------------
@@ -23,7 +23,7 @@ libMiddle.a: gval.o func01.o func02com.o
 %_shr.o: %_shr.c
 	$(CC) $(CFLAGS) -fPIC -c $<
 
-libMiddle.so: gval_shr.o func01_shr.o func02com_shr.o
+libMiddle.so: gval_shr.o func01_shr.o func02com_shr.o func03_shr.o
 	$(CC) -shared -o $@ $^
 
 -include *.d
