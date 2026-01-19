@@ -125,6 +125,9 @@ ap01_try2 : ap01.o
 	-L ../ext/libA -Wl,--no-as-needed -lMiddle -lLowProd01 \
 	-o $@
 
+run_ap01_try2 : ap01_try2
+	LD_LIBRARY_PATH=../ext/libBShim:../ext/libA ./ap01_try
+
 run_ap01_A_Br_B : ap01_try
 	LD_LIBRARY_PATH=../ext/libA:../ext/libBBridge:../ext/libB/ ./ap01_try
 
@@ -151,4 +154,4 @@ clean:
 	rm -f ../ext/libA/*
 	rm -f ../ext/incB/*
 	rm -f ../ext/libB/*
-	rm -f ../ext/libBBridge/*
+	rm -f ../ext/libBShim/*
