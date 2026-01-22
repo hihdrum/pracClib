@@ -107,13 +107,15 @@ CFLAGS += -MMD
 
 ap01_try : ap01.o
 	$(CC) $(CFLAGS) $^ \
-	-L ../ext/libBShim -lMiddle \
-	-L ../ext/libA -lMiddleReal \
-	-L ../ext/libA -lLowProd01 \
+	-L ../ext/libBShim -lMiddleWrap \
+	-L ../ext/libB -lMiddle \
+	-L ../ext/libB -lLowProd02 \
+	-L ../ext/libA -lMiddleA \
+	-L ../ext/libA -Wl,--no-as-neede -lLowProd01 \
 	-o $@
 
 run_ap01_try : ap01_try
-	LD_LIBRARY_PATH=../ext/libBShim:../ext/libA ./ap01_try
+	LD_LIBRARY_PATH=../ext/libBShim:../ext/libB:../ext/libA ./ap01_try
 
 
 
@@ -124,9 +126,6 @@ ap01_try2 : ap01.o
 	-L ../ext/libB -lMiddle -lLowProd02 \
 	-L ../ext/libA -Wl,--no-as-needed -lMiddle -lLowProd01 \
 	-o $@
-
-run_ap01_try2 : ap01_try2
-	LD_LIBRARY_PATH=../ext/libBShim:../ext/libA ./ap01_try
 
 run_ap01_A_Br_B : ap01_try
 	LD_LIBRARY_PATH=../ext/libA:../ext/libBBridge:../ext/libB/ ./ap01_try

@@ -8,13 +8,14 @@ void func01(int x, int y)
 {
   printf("製品B 中間ライブラリ(共有, ラッパー) : %s: x = %d, y = %d\n", __func__, x, y);
   printf("説明 : %s\n", libDescribe);
+
   static void (*real_func01)(int) = NULL;
   if(!real_func01)
   {
-    void *handle = dlopen("libMiddleReal.so", RTLD_LAZY);
+    void *handle = dlopen("libMiddleA.so", RTLD_LAZY);
     if(!handle)
     {
-      fprintf(stderr, "dlopen(libComReal.so)異常 : %s\n", dlerror());
+      fprintf(stderr, "dlopen(libMiddleA.so)異常 : %s\n", dlerror());
       exit(1);
     }
 
