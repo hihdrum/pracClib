@@ -1,23 +1,22 @@
+#-----------------------------------------
+# ProdA中間ライブラリのfunc01をラップし、
+# ProdB中間ライブラリのfunc01から呼出す。
+#-----------------------------------------
 .PHONY: all
-all : libMiddle.so
+all : libMiddleWrap.so
 
 CFLAGS += -Wall
-CFLAGS += -g3
+CFLAGS += -g
 CFLAGS += -MMD
 
-# 静的ライブラリ向け
 %.o: %.c
-	$(CC) $(CFLAGS) -c $<
-
-# 共有ライブラリ向け
-%_shr.o: %_shr.c
 	$(CC) $(CFLAGS) -fPIC -c $<
 
-libMiddle.so: func01_shr.o
+libMiddleWrap.so: func01_shr.o
 	$(CC) -shared -o $@ $^ -ldl
 
 -include *.d
 
 .PHONY: clean
 clean:
-	rm -f *.o *.d *.a *.so
+	rm -f *.o *.d *.so
