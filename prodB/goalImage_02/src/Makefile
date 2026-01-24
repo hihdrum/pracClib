@@ -17,7 +17,7 @@ LOW_LIBS_A := $(LIB_PATH_A)/libLowProd01.so
 LOW_HEADER_A := $(LIB_INC_A)/lowProd01.h
 
 MID_DIR_A := ../../../middle/prodA
-MID_LIBS_A := $(LIB_PATH_A)/libMiddleReal.so
+MID_LIBS_A := $(LIB_PATH_A)/libMiddleA.so
 MID_HEADER_A := $(LIB_INC_A)/middle.h
 
 .PHONY : preLibA
@@ -32,7 +32,7 @@ $(LOW_HEADER_A) : $(LOW_DIR_A)/lowProd01.h
 $(LOW_DIR_A)/lowProd01.h $(LOW_DIR_A)/libLowProd01.so :
 	make -C $(LOW_DIR_A)
 
-$(LIB_PATH_A)/libMiddleReal.so : $(MID_DIR_A)/libMiddle.so
+$(LIB_PATH_A)/libMiddleA.so : $(MID_DIR_A)/libMiddle.so
 	cp $< $@
 
 $(MID_HEADER_A) : $(MID_DIR_A)/middle.h
