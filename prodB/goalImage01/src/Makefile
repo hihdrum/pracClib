@@ -119,7 +119,7 @@ ap01 : ap01.o
 	-o $@
 
 run_ap01 : ap01
-	LD_LIBRARY_PATH=../ext/libWrap:../ext/libB:../ext/libA ./ap01_try
+	LD_LIBRARY_PATH=../ext/libWrap:../ext/libB:../ext/libA ./ap01
 
 .PHONY: clean
 clean:
