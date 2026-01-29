@@ -4,8 +4,8 @@
 
 void func01(int x)
 {
-  printf("製品A 中間ライブラリ(共有,埋込み) : %s : x = %d\n", __func__, x);
-  printf("説明 : %s\n", libDescribe);
-  printf("CALL 製品A lowProd01_func01\n");
+  printf("製品A 中間共有ライブラリの関数 %s(%d) が呼ばれました。\n", __func__, x);
+  printf("製品A グローバル変数の参照 : %s\n", libDescribe);
   lowProd01_func01(x);
+  printf("製品A 中間共有ライブラリの関数 %s を抜けます。\n", __func__);
 }

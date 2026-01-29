@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "middle.h"
 
-static const char *funcDescribe = "製品B 中間ライブラリ(共有, static変数)";
+static const char *funcDescribe = "製品B 中間共有ライブラリ ファイルスコープstatic変数";
 static void func(int x);
 
 void func04(int x)
@@ -9,14 +9,15 @@ void func04(int x)
   int called = 0;
   called++;
 
-  printf("製品B 中間ライブラリ(共有, 埋込み) : %s : x = %d\n", __func__, x);
-  printf("CALL static func : %d times.\n", called);
+  printf("製品B 中間共有ライブラリの関数 %s(%d) が呼ばれました。\n", __func__, x);
   func(x);
+  printf("製品B 中間共有ライブラリの関数 %s を抜けます。\n", __func__);
 }
 
 static void func(int x)
 {
-  printf("%s : %s : x = %d\n", funcDescribe, __func__, x);
-  printf("CALL func01\n");
+  printf("製品B 中間ライブラリの静的関数 %s(%d) が呼ばれました。\n", __func__, x);
+  printf("製品B ファイルスコープstatic変数の参照 : %s\n", funcDescribe);
   func02com(x);
+  printf("製品B 中間ライブラリの関数 %s を抜けます。\n", __func__);
 }

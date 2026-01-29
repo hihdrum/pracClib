@@ -1,1 +1,1 @@
-const char *libDescribe = "gval : 製品A中間ライブラリ";
+const char *libDescribe = "製品A 中間ライブラリ グローバル変数";
