@@ -18,5 +18,5 @@ static void func(int x)
 {
   printf("%s : %s : x = %d\n", funcDescribe, __func__, x);
   printf("CALL func01\n");
-  func01(x, 999);
+  func02com(x);
 }
