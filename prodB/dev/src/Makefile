@@ -31,7 +31,7 @@ $(TO_LOW_LIBS) : $(LIB_PATH)/% : $(LOWPROD02_DIR)/%
 $(TO_LOW_HEADER) : $(LOWPROD02_DIR)/lowProd02.h
 	cp $< $@
 
-$(LOWPROD02_DIR)/lowProd01.h $(LOWPROD02_DIR)/libLowProd01.a $(LOWPROD02_DIR)/libLowProd01.so :
+$(LOWPROD02_DIR)/lowProd02.h $(LOWPROD02_DIR)/libLowProd02.a $(LOWPROD02_DIR)/libLowProd02.so :
 	make -C $(LOWPROD02_DIR)
 
 # Middle層
