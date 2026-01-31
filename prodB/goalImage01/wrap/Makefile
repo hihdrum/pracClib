@@ -12,7 +12,8 @@ CFLAGS += -MMD
 %.o: %.c
 	$(CC) $(CFLAGS) -fPIC -c $<
 
-libMiddleWrap.so: func01_shr.o func04_shr.o
+#libMiddleWrap.so: func01_shr.o func04_shr.o func05_shr.o
+libMiddleWrap.so: func01_shr.o func05_shr.o
 	$(CC) -shared -o $@ $^ -ldl
 
 -include *.d
