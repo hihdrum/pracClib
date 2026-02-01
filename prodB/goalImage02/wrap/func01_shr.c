@@ -8,13 +8,13 @@ extern const char *libDescribe;
 
 void func01(int x, int y)
 {
-  printf("製品B 中間ライブラリ(共有, ラッパー) : %s: x = %d, y = %d\n", __func__, x, y);
-  printf("説明 : %s\n", libDescribe);
+  printf("製品Bラッパー 中間共有ライブラリの関数 %s(%d, %d)が呼ばれました。\n", __func__, x, y);
+  printf("製品Bラッパー グローバル変数の参照 : %s\n", libDescribe);
 
   static void (*real_func01)(int) = NULL;
   if(!real_func01)
   {
-    void *handle = dlmopen(LM_ID_NEWLM, "libMiddleA.so", RTLD_LAZY | RTLD_LOCAL);
+    void *handle = dlmopen(LM_ID_NEWLM, "libMiddleA.so", RTLD_LAZY);
     if(!handle)
     {
       fprintf(stderr, "dlopen(libMiddleA.so)異常 : %s\n", dlerror());
@@ -29,6 +29,6 @@ void func01(int x, int y)
     }
   }
 
-  printf("CALL func01\n");
   real_func01(x);
+  printf("製品Bラッパー 中間共有ライブラリの関数 %s を抜けます。\n", __func__);
 }
