@@ -24,7 +24,7 @@ libMiddle.a: gval.o func01.o func02com.o func03.o func04.o func05.o
 	$(CC) $(CFLAGS) -fPIC -c $<
 
 libMiddle.so: gval_shr.o func01_shr.o func02com_shr.o func03_shr.o func04_shr.o func05_shr.o
-	$(CC) -shared -o $@ $^
+	$(CC) -shared -o $@ $^ -L ../../lowProd01 -lLowProd01
 
 -include *.d
 
